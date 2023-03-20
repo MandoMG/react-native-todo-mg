@@ -1,0 +1,8 @@
+node_modules
+ios/Pods
+
+build
+.idea
+.gradle
+local.properties
+*.iml
