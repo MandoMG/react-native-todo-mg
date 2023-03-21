@@ -6,9 +6,9 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import CommonStyles from '../../Styles';
-import useDynamicColors from '../../Styles/useColors';
-import { TodoItem } from '../../Types';
+import CommonStyles from '../../../Styles';
+import useDynamicColors from '../../../Styles/useColors';
+import { TodoItem } from '../../../Types';
 
 interface TodoProps {
   todoItem: TodoItem;
