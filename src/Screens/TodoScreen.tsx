@@ -10,7 +10,7 @@ import { TodoItem } from '../Types';
 import useDynamicColors from '../Styles/useColors';
 import CommonStyles from '../Styles';
 import { useDispatch, useSelector } from 'react-redux';
-import { addTodo } from '../Redux/todos/todoSlice';
+import { addTodo, setSelectedTodo, updateTodo } from '../Redux/todos/todoSlice';
 import TodoList from './TodoList/Components/TodoList';
 import { getSelectedTodo } from '../Redux/todos/todoSelectors';
 
@@ -19,7 +19,6 @@ const TodoMainPage = () => {
   const dispatch = useDispatch();
   const selectedTodo = useSelector(getSelectedTodo);
 
-  const [isEdit, setIsEdit] = useState<boolean>();
   const [todoValue, setTodoValue] = useState<string>();
 
   const backgroundStyle = {
@@ -50,8 +49,18 @@ const TodoMainPage = () => {
     dispatch(addTodo(newTodo))
   };
 
-  // TODO: Replace this with Redux Actions
   const onSavePress = () => {
+    if (!selectedTodo) {
+      return;
+    }
+
+    const editedTodo: TodoItem = {
+      ...selectedTodo,
+      title: todoValue || ''
+    }
+
+    dispatch(updateTodo(editedTodo))
+    dispatch(setSelectedTodo(undefined));
   };
 
   useEffect(() => {

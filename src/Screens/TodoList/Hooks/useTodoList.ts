@@ -1,28 +1,25 @@
 import { useEffect, useState } from 'react';
 import { Alert, AlertButton } from 'react-native';
-import { getObject, setObject } from "../../../Facades/StorageFacade";
+import { getObject } from "../../../Facades/StorageFacade";
 import { TodoItem } from '../../../Types';
-import { useDispatch } from 'react-redux';
-import { removeTodo } from '../../../Redux/todos/todoSlice';
-
-enum StorageKeys {
-  TodoList = 'todo-list'
-}
+import { useDispatch, useSelector } from 'react-redux';
+import { removeTodo, setSelectedTodo } from '../../../Redux/todos/todoSlice';
+import { StorageKeys } from '../../../Types/enums';
+import { getSelectedTodo } from '../../../Redux/todos/todoSelectors';
 
 const useTodoList = () => {
   const [todoList, setTodoList] = useState<TodoItem[]>();
-  const [selectedTodo, setSelectedTodo] = useState<TodoItem>();
+  const selectedTodo = useSelector(getSelectedTodo);
   const dispatch = useDispatch();
 
   const onDeleteConfirm = (todoID: string) => {
     dispatch(removeTodo(todoID))
   }
 
-  // TODO: Define is edit with selected todo
   const onDelete = (todoID: string) => {
-    // if (isEdit) {
-    //   return;
-    // };
+    if (selectedTodo) {
+      return;
+    };
 
     const title = 'Deleting Item';
     const message = 'Are you sure you want to delete this todo?';
@@ -34,9 +31,7 @@ const useTodoList = () => {
   }
 
   const onEdit = (todo: TodoItem) => {
-    // setTodoValue(todo.title);
-    setSelectedTodo(todo);
-    // setIsEdit(true);
+    dispatch(setSelectedTodo(todo));
   };
 
   const onItemToggle = (todo: TodoItem) => {
@@ -54,18 +49,10 @@ const useTodoList = () => {
     });
   }
 
-  // const setItemsIntoStorage = () => {
-  //   setObject(StorageKeys.TodoList, todoList);
-  // };
-
   const retrieveItemsFromStorage = () => {
     const listItems = getObject<TodoItem[]>(StorageKeys.TodoList);
     setTodoList(listItems);
   };
-
-  // useEffect(() => {
-  //   setItemsIntoStorage();
-  // }, [todoList]);
 
   useEffect(() => {
     retrieveItemsFromStorage();

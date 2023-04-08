@@ -22,14 +22,25 @@ export const todoSlice = createSlice({
     removeTodo: (state, action: PayloadAction<string>) => {
       state.todoList = state.todoList.filter(item => item.id !== action.payload);
     },
-    setSelectedTodo: (state, action: PayloadAction<TodoItem>) => {
-      console.log('Action: ', action);
+    setSelectedTodo: (state, action: PayloadAction<TodoItem | undefined>) => {
       state.selectedTodo = action.payload;
+    },
+    updateTodo: (state, action: PayloadAction<TodoItem>) => {
+      state.todoList = state.todoList?.map(item => {
+        if (item.id === action.payload.id) {
+          return {
+            ...item,
+            title: action.payload.title
+          }
+        };
+
+        return item;
+      });
     }
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { addTodo, removeTodo } = todoSlice.actions
+export const { addTodo, removeTodo, setSelectedTodo, updateTodo } = todoSlice.actions
 
 export default todoSlice.reducer
