@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { Alert, AlertButton } from 'react-native';
 import { getObject, setObject } from "../../../Facades/StorageFacade";
 import { TodoItem } from '../../../Types';
+import { useDispatch } from 'react-redux';
+import { removeTodo } from '../../../Redux/todos/todoSlice';
 
 enum StorageKeys {
   TodoList = 'todo-list'
@@ -10,11 +12,10 @@ enum StorageKeys {
 const useTodoList = () => {
   const [todoList, setTodoList] = useState<TodoItem[]>();
   const [selectedTodo, setSelectedTodo] = useState<TodoItem>();
+  const dispatch = useDispatch();
 
   const onDeleteConfirm = (todoID: string) => {
-    setTodoList(currentTodoState => {
-      return currentTodoState?.filter(item => item.id !== todoID);
-    });
+    dispatch(removeTodo(todoID))
   }
 
   // TODO: Define is edit with selected todo
@@ -38,7 +39,6 @@ const useTodoList = () => {
     // setIsEdit(true);
   };
 
-
   const onItemToggle = (todo: TodoItem) => {
     setTodoList(currentTodoState => {
       return currentTodoState?.map(item => {
@@ -54,18 +54,18 @@ const useTodoList = () => {
     });
   }
 
-  const setItemsIntoStorage = () => {
-    setObject(StorageKeys.TodoList, todoList);
-  };
+  // const setItemsIntoStorage = () => {
+  //   setObject(StorageKeys.TodoList, todoList);
+  // };
 
   const retrieveItemsFromStorage = () => {
     const listItems = getObject<TodoItem[]>(StorageKeys.TodoList);
     setTodoList(listItems);
   };
 
-  useEffect(() => {
-    setItemsIntoStorage();
-  }, [todoList]);
+  // useEffect(() => {
+  //   setItemsIntoStorage();
+  // }, [todoList]);
 
   useEffect(() => {
     retrieveItemsFromStorage();
