@@ -6,9 +6,10 @@
  */
 
 import React from 'react';
-import { store } from './Redux/store'
+import { persistor, store } from './Redux/store'
 import { Provider } from 'react-redux'
 import TodoMainPage from './Screens/TodoScreen';
+import { PersistGate } from 'redux-persist/integration/react';
 
 /* TODOS:
  * Add Redux
@@ -18,7 +19,9 @@ import TodoMainPage from './Screens/TodoScreen';
 const App = (): JSX.Element => {
   return (
     <Provider store={store}>
-      <TodoMainPage />
+      <PersistGate loading={null} persistor={persistor}>
+        <TodoMainPage />
+      </PersistGate>
     </Provider>
   );
 }
