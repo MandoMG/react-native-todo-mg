@@ -14,6 +14,8 @@ import { addTodo, setSelectedTodo, updateTodo } from '../Redux/todos/todoSlice';
 import TodoList from './TodoList/Components/TodoList';
 import { getSelectedTodo } from '../Redux/todos/todoSelectors';
 
+import firestore from "@react-native-firebase/firestore";
+
 const TodoMainPage = () => {
   const Colors = useDynamicColors();
   const dispatch = useDispatch();
@@ -45,6 +47,11 @@ const TodoMainPage = () => {
 
   const onAddPress = () => {
     const newTodo = createTodoFromString();
+
+    firestore().collection('Todos').doc().set({
+      title: newTodo.title,
+      isCompleted: newTodo.isCompleted
+    }).then(() => { console.log('TODO Added!') })
 
     dispatch(addTodo(newTodo))
   };
